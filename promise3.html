@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>底层实现</title>
+  </head>
+  <body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      //发布订阅模式
+      class MyPromise {
+        constructor(fn) {
+          this.fn = fn;
+          this._resolveQueue = []; //成功队列
+          this._rejectQueue = []; //失败队列
+          fn(this.resolve.bind(this), this.reject.bind(this));
+        }
+        //成功发布
+        resolve(val) {
+          this._resolveQueue.forEach((cb) => cb(val));
+        }
+        //错误发布
+        reject(val) {
+          this._rejectQueue.forEach((cb) => cb(val));
+        }
+        //依赖收集  订阅
+        then(resolve, reject) {
+          resolve && this._resolveQueue.push(resolve);
+          reject && this._rejectQueue.push(reject);
+          return this;
+        }
+      }
+
+      function ajax(v) {
+        return new MyPromise((resolve, reject) => {
+          setTimeout(() => {
+            //执行
+            resolve(v);
+            //reject("失败")
+          }, 2000);
+        });
+      }
+      ajax("成功")
+        .then((v) => {
+            console.log(v);
+          },
+          (error) => {
+            console.log(error);
+          }
+        )
+        .then((v) => {
+            console.log(v);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+
+        // (async ()=>{
+        //   let res1 = await ajax("成功A");
+        //   console.log(res1);
+        //   let res2 = await ajax("成功B");
+        //   console.log(res2);
+        // })()
+    </script>
+  </body>
+</html>

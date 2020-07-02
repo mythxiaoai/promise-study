@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>未来发展</title>
+  </head>
+  <body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      //模拟ajax
+      function ajax(str, time, boolean = true) {
+        return new Promise((reslove, reject) => {
+          setTimeout(() => {
+            console.log("执行" + str);
+            boolean ? reslove(str + "返回结果成功") : reject(str + "返回结果失败");
+          }, time || 1000);
+        });
+      }
+
+      Promise.all([ajax("a", 2000), ajax("b", 3000), ajax("c", 4000)]).then(function (datas) {
+        //都成功  ["a返回结果成功", "b返回结果成功", "c返回结果成功"]
+        //失败就会报错
+        console.log(datas);
+      });
+      Promise.allSettled([ajax("a", 2000), ajax("b", 3000, false), ajax("c", 4000)]).then(function (datas) {
+        //返回结果如下，会返回数组对象
+        console.log(datas);
+      });
+
+      /*
+      [
+        {
+          "status": "fulfilled",
+          "value": "a返回结果成功"
+        },
+        {
+          "status": "rejected",
+          "reason": "b返回结果失败"
+        },
+        {
+          "status": "fulfilled",
+          "value": "c返回结果成功"
+        }
+      ]
+      */
+    </script>
+  </body>
+</html>

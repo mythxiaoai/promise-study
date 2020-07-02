@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>为什么需要promise</title>
+  </head>
+  <body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      //地狱回调例子
+      // $.ajax({
+      //   type: "get",
+      //   url: "./js/a.json",
+      //   success(data) {
+      //     //...业务逻辑A
+      //     console.log(data);
+
+      //     $.ajax({
+      //       type: "get",
+      //       url: "./js/b.json",
+      //       success(data) {
+      //         //...业务逻辑B
+      //         console.log(data);
+      //         $.ajax({
+      //           type: "get",
+      //           url: "./js/c.json",
+      //           success(data) {
+      //             //...业务逻辑C
+      //             console.log(data);
+      //           },
+      //         });
+      //       },
+      //     });
+      //   },
+      // });
+
+      //我来拯救下地狱回调
+      $.ajax({
+        type: "get",
+        url: "./js/a.json",
+        success: successA,
+      });
+
+      function successA(data) {
+        //...业务逻辑A
+        console.log(data);
+        $.ajax({
+          type: "get",
+          url: "./js/b.json",
+          success: successB,
+        });
+      }
+
+      function successB(data) {
+        //...业务逻辑B
+        console.log(data);
+        $.ajax({
+          type: "get",
+          url: "./js/c.json",
+          success: successC,
+        });
+      }
+
+      function successC(data) {
+        //...业务逻辑C
+        console.log(data);
+      }
+
+      // for (let index = 0; index < 99999; index++) {
+      //   console.log(index);
+      // }
+      
+      //generator
+      // function* run() {
+      //   yield $.ajax("./js/a.json");
+      //   yield $.ajax("./js/b.json");
+      //   yield $.ajax("./js/c.json");
+      //   return 666;
+      // }
+      // let runVar = run();
+      // console.log(runVar.next().value.then((v) => console.log(v)));
+      // console.log(runVar.next().value.then((v) => console.log(v)));
+      // console.log(runVar.next().value.then((v) => console.log(v)));
+      // console.log(runVar.next());
+    </script>
+  </body>
+</html>

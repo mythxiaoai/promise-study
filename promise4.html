@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>最佳实践</title>
+  </head>
+  <body>
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+      let page = {
+        async init() {
+          // this.search()
+          //   .then((data) => {
+          //     //得到search()返回的结果搞事情
+          //     console.log(data);
+          //     return this.list(data);
+          //   })
+          //   .then((data) => {
+          //     console.log(data);
+          //   })
+          //   .catch((res) => {
+          //     console.error(res.responseText);
+          //   });
+          let selectData = await this.search();
+          console.log(selectData);
+          let list = await this.list(selectData[0].a);
+          console.log(list);
+        },
+        //搜索条件
+        search() {
+          return $.ajax({
+            type: "get",
+            url: "./js/a.json",
+          });
+        },
+        //表格初始化
+        list(data) {
+          return $.ajax({
+            type: "get",
+            url: "./js/b.json",
+            data: { data },
+          });
+        },
+        info() {
+          return $.ajax({
+            type: "get",
+            url: "./js/c.json",
+          });
+        },
+      };
+      page.init();
+
+      function requestImg(src) {
+        return new Promise(function (resolve, reject) {
+          var img = new Image();
+          img.onload = function () {
+            resolve(img);
+          };
+          img.src = src;
+        });
+      }
+
+      requestImg("http://www.itcast.cn/2018czgw/images/logo.png").then(v=>{
+        console.log(v);
+      })
+    </script>
+  </body>
+</html>
